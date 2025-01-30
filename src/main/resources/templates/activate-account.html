@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .email-header {
+            background-color: #6a11cb;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 30px;
+            text-align: center;
+        }
+        .activation-code {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            display: inline-block;
+            color: #333;
+        }
+        .activation-button {
+            display: inline-block;
+            background-color: #6a11cb;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .email-footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-header">
+        <h1>Welcome to BookVerse</h1>
+    </div>
+    <div class="email-body">
+        <h2 th:text="'Hello, ' + ${username} + '!'">Hello, User!</h2>
+        <p>Thank you for registering with BookVerse. To activate your account, please use the activation code below or click the button.</p>
+
+        <div class="activation-code" th:text="${activationCode}">123456</div>
+
+        <br>
+
+        <a th:href="${confirmationUrl}" class="activation-button">Activate Account</a>
+
+        <p>If you didn't create an account, please ignore this email.</p>
+    </div>
+    <div class="email-footer">
+        © 2024 BookVerse. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

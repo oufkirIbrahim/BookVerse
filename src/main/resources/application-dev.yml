@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/bookVerse
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: localhost
+    port: 1025
+    username: ibra
+    password: ibra
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+
+application:
+  security:
+    jwt:
+      secret: 9893308d74a9a9499bacfdb402c2e8278f67e40d000c18142e29de2d23bc5dc1cdd3f072b97a8d101a8c85c70d0c7979f9ca783123d04d8b164df8eeb411cb82
+      expiration: 86400000
+  mail:
+    from: bookVerse@gmail.com
+    activation-Url: http://localhost:8080/api/v1/auth/activate-account
