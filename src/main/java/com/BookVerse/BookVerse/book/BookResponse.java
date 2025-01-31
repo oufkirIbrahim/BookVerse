@@ -13,7 +13,7 @@ public class BookResponse {
     private String author;
     private String description;
     private String genre;
-    private String cover;
+    private byte[] cover;
     private String owner;
     private String isbn;
     private String language;

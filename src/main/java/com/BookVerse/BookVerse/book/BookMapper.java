@@ -2,6 +2,7 @@ package com.BookVerse.BookVerse.book;
 
 import com.BookVerse.BookVerse.common.PageResponse;
 import com.BookVerse.BookVerse.feedback.Feedback;
+import com.BookVerse.BookVerse.file.FileUtils;
 import com.BookVerse.BookVerse.history.BookTransactionHistory;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -21,6 +22,7 @@ public interface BookMapper {
     void updateBookFromRequest(BookRequest bookRequest, Book book);
 
     @Mapping(target = "rating", expression = "java(calculateRate(book.getFeedbacks()))")
+    @Mapping(target = "cover", expression = "java(getImageBytes(book.getCover()))")
     BookResponse toBookResponse(Book book);
 
     // Custom method to calculate the average rating
@@ -33,6 +35,11 @@ public interface BookMapper {
                 .average()
                 .orElse(0.0);
         return Math.round(rate * 100.0) / 100.0; // Round to 2 decimal places
+    }
+
+    // Custom method to convert the image to a byte array
+    default byte[] getImageBytes(String cover) {
+        return FileUtils.readFileFromLocation(cover);
     }
 
     List<BookResponse> toBookResponses(List<Book> content);

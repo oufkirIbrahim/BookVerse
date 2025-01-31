@@ -2,10 +2,7 @@ package com.BookVerse.BookVerse.history;
 
 import com.BookVerse.BookVerse.book.Book;
 import com.BookVerse.BookVerse.user.entity.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -25,7 +22,9 @@ public class BookTransactionHistory {
     @ManyToOne
     private User user;
 
-    private boolean isReturned;
-    private boolean isReturnApproved;
+    private String message;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 }

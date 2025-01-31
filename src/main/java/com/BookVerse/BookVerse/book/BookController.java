@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("books")
@@ -69,6 +70,20 @@ public class BookController {
     @PatchMapping("/shareable/{book-id}")
     public ResponseEntity<Long> updateBookShareable(@PathVariable("book-id") Long bookId, Authentication connectedUser) {
         return ResponseEntity.ok(bookService.updateBookShareable(bookId, connectedUser));
+    }
+
+    @PatchMapping("archive/{book-id}")
+    public ResponseEntity<Long> archiveBook(@PathVariable("book-id") Long bookId, Authentication connectedUser) {
+        return ResponseEntity.ok(bookService.updateArchiveStatus(bookId, connectedUser));
+    }
+
+    @PostMapping(value = "/cover/{book-id}", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadBookCover(@PathVariable("book-id") Long bookId,
+                                             @RequestParam("file") MultipartFile cover,
+                                             Authentication connectedUser
+    ) {
+        bookService.uploadBookCover(bookId, cover, connectedUser);
+        return ResponseEntity.ok().build();
     }
 
 }

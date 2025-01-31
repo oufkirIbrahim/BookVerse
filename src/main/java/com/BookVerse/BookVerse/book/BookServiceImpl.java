@@ -2,6 +2,7 @@ package com.BookVerse.BookVerse.book;
 
 import com.BookVerse.BookVerse.common.PageResponse;
 import com.BookVerse.BookVerse.exceptions.OperationNotPermittedException;
+import com.BookVerse.BookVerse.file.FileUploadService;
 import com.BookVerse.BookVerse.history.BookTransactionHistory;
 import com.BookVerse.BookVerse.history.BookTransactionHistoryRepository;
 import com.BookVerse.BookVerse.user.entity.User;
@@ -13,8 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +23,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final BookTransactionHistoryRepository bookTransactionHistoryRepository;
+    private final FileUploadService fileUploadService;
 
     @Override
     public Long saveBook(BookRequest bookRequest, Authentication authentication) {
@@ -83,6 +84,29 @@ public class BookServiceImpl implements BookService {
             return book.getId();
         }
         throw new OperationNotPermittedException("You Cannot update book Shareable status " + bookId);
+    }
+
+    @Override
+    public Long updateArchiveStatus(Long bookId, Authentication connectedUser){
+        User user = (User) connectedUser.getPrincipal();
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException(
+                "No book found with id: " + bookId));
+        if (book.getOwner().getId().equals(user.getId())){
+            book.setArchived(!book.isArchived());
+            bookRepository.save(book);
+            return book.getId();
+        }
+        throw new OperationNotPermittedException("You Cannot update book Shareable status " + bookId);
+    }
+
+    @Override
+    public void uploadBookCover(Long bookId, MultipartFile coverImage, Authentication connectedUser){
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException(
+                "No book found with id: " + bookId));
+        User user = (User) connectedUser.getPrincipal();
+        String coverPath = fileUploadService.saveFile(coverImage, book, user.getId());
+        book.setCover(coverPath);
+        bookRepository.save(book);
     }
 
 

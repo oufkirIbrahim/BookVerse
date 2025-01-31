@@ -45,6 +45,7 @@ public class Book {
     private List<BookTransactionHistory> bookTransactionHistories;
     private boolean archived;
     private boolean shareable;
+    private boolean borrowed;
     @Embedded
     private AuditFields auditFields;
 
